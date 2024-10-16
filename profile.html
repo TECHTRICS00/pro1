@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Blood Bank Management</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Critical CSS -->
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+
+        /* Layout Components */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .main-heading {
+            font-size: 1.25rem;
+            color: #ffeb3b;
+            margin: 0.625rem 0;
+        }
+
+        /* Navigation */
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffeb3b;
+        }
+
+        /* Profile Section */
+        .profile-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-header h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .logout-btn {
+            background-color: #ff4b4b;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff2a2a;
+        }
+
+        .profile-image {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .profile-image img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4CAF50;
+        }
+
+        .upload-label {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .profile-details h2 {
+            font-size: 22px;
+            color: #333;
+        }
+
+        .profile-details p {
+            font-size: 16px;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .blood-group-controls {
+            margin: 1rem 0;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Info Section */
+        .info-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-section h3 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 1.25rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #ffeb3b;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #ffffff;
+        }
+
+        /* Form Elements */
+        input[type="number"],
+        select,
+        button {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .blood-group-controls {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .main-heading {
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>IoT Blood Bank Management</h1>
+        <h2 class="main-heading">Welcome, <span id="userName">User</span></h2>
+        <nav>
+            <ul>
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="change_password.html">Change Password</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="hoslogin.html" onclick="logout()">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="profile-container">
+            <div class="profile-header">
+                <h1>My Profile</h1>
+                <button class="logout-btn" onclick="logout()" aria-label="Logout">Logout</button>
+            </div>
+
+            <div class="profile-image">
+                <img id="profileImg" src="default-profile.png" alt="Profile Picture">
+                <input type="file" id="uploadImg" style="display: none;">
+                <label for="uploadImg" class="upload-label">Change Picture</label>
+            </div>
+
+            <div class="profile-details">
+                <h2>Oswald Hope Robertson</h2>
+                <p>Email: bloodbank@example.com</p>
+                <p>Phone: +91 9876543210</p>
+                <p>Location: Woolwich, London, United Kingdom</p>
+            </div>
+        </div>
+
+        <!-- Blood Group Input -->
+        <div class="blood-group-controls">
+            <select id="bloodGroupSelect">
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+            <input type="number" id="quantityInput" placeholder="Quantity" min="1">
+            <button onclick="saveBloodGroup()">Save Blood Group</button>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <canvas id="bloodGroupChart" width="400" height="200"></canvas>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+        <script>
+            const uploadImg = document.getElementById('uploadImg');
+            const profileImg = document.getElementById('profileImg');
+
+            uploadImg.addEventListener('change', function() {
+                const file = uploadImg.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profileImg.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            const ctx = document.getElementById('bloodGroupChart').getContext('2d');
+            const bloodGroupChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+                    datasets: [{
+                        label: 'Blood Group Quantities',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            function saveBloodGroup() {
+                const userId = 1; // Replace with actual user ID
+                const bloodGroup = document.getElementById('bloodGroupSelect').value;
+                const quantity = document.getElementById('quantityInput').value;
+
+                fetch('http://localhost:5000/saveBloodGroup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId, bloodGroup, quantity })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    getBloodGroups(); // Fetch updated blood groups after saving
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            function getBloodGroups() {
+                const userId = 1; // Replace with actual user ID
+
+                fetch(`http://localhost:5000/getBloodGroups/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const chartData = [];
+                    const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+                    
+                    bloodGroups.forEach(group => {
+                        const found = data.find(item => item.blood_group === group);
+                        chartData.push(found ? found.quantity : 0); // Push quantity or 0 if not found
+                    });
+
+                    updateChart(chartData);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            function updateChart(data) {
+                bloodGroupChart.data.datasets[0].data = data;
+                bloodGroupChart.update();
+            }
+
+            // Call getBloodGroups() when the page loads to show existing data
+            window.onload = function() {
+                getBloodGroups();
+            };
+
+            function logout() {
+                // Logic for logging out (e.g., clearing session, redirecting)
+                alert('You have logged out.');
+            }
+        </script>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 IoT Blood Bank Management. All Rights Reserved.</p>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+    </footer>
+</body>
+</html>

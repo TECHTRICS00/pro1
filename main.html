@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - IoT Blood Bank Management</title>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Critical CSS -->
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+
+        /* Layout Components */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .main-heading {
+            font-size: 1.25rem;
+            color: #ffeb3b;
+            margin: 0.625rem 0;
+        }
+
+        /* Navigation */
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffeb3b;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-details {
+            text-align: center;
+        }
+
+        .profile-details img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 2px solid #ccc;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .blood-group-controls {
+            margin: 1rem 0;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Info Section */
+        .info-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-section h3 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 1.25rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #ffeb3b;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #ffffff;
+        }
+
+        /* Form Elements */
+        input[type="number"],
+        select,
+        button {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .blood-group-controls {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .main-heading {
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>IoT Blood Bank Management</h1>
+        <h2 class="main-heading">Welcome, <span id="userName">User</span></h2>
+        <nav>
+            <ul>
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="change_password.html">Change Password</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="hoslogin.html" onclick="logout()">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="profile-section">
+            <h2>Hospital Profile Information</h2>
+<div class="profile-details">
+    <div class="image-upload">
+        <label for="profileImageInput">
+            <img id="profileImage" src="" alt="Profile Image" class="circular-image" style="cursor:pointer;">
+        </label>
+        <input type="file" id="profileImageInput" accept="image/*" style="display:none;" onchange="loadImage(event)">
+    </div>
+    <p>
+        <strong>Name:</strong>
+        <input type="text" id="profileNameInput" placeholder="Enter hospital name">
+    </p>
+    <p>
+        <strong>Email:</strong>
+        <input type="email" id="profileEmailInput" placeholder="Enter email">
+    </p>
+    <p>
+        <strong>Location:</strong>
+        <input type="text" id="profileLocationInput" placeholder="Enter location">
+    </p>
+    <p>
+        <strong>Contact Number:</strong>
+        <input type="tel" id="profileContactInput" placeholder="Enter contact number">
+    </p>
+    <p>
+        <strong>Established Year:</strong>
+        <input type="number" id="profileYearInput" placeholder="Enter established year">
+    </p>
+    <button onclick="saveProfile()">Save</button>
+</div>
+
+<style>
+.circular-image {
+    width: 100px; /* Set the desired width */
+    height: 100px; /* Set the desired height */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the area properly */
+    border: 2px solid #ccc; /* Optional: border around the image */
+}
+</style>
+
+<script>
+function loadImage(event) {
+    const image = document.getElementById('profileImage');
+    image.src = URL.createObjectURL(event.target.files[0]);
+}
+
+function saveProfile() {
+    const name = document.getElementById('profileNameInput').value;
+    const email = document.getElementById('profileEmailInput').value;
+    const location = document.getElementById('profileLocationInput').value;
+    const contact = document.getElementById('profileContactInput').value;
+    const year = document.getElementById('profileYearInput').value;
+
+    document.getElementById('profileName').innerText = name;
+    document.getElementById('profileEmail').innerText = email;
+    document.getElementById('profileLocation').innerText = location;
+    document.getElementById('profileContact').innerText = contact;
+    document.getElementById('profileYear').innerText = year;
+
+    // Add code to save this data to your database as needed
+}
+</script>
+
+
+            <div class="image-upload">
+                <input type="file" id="imageUpload" accept="image/*">
+                <button id="uploadBtn">Upload Image</button>
+            </div>
+        </section>
+
+        <section class="chart-section">
+            <h3>Blood Group Availability</h3>
+            <div class="blood-group-controls">
+                <input type="number" id="bloodGroupAmount" placeholder="Enter amount">
+                <select id="bloodGroupSelect">
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="A1+">A1+</option>
+                    <option value="A1-">A1-</option>
+                    <option value="A2+">A2+</option>
+                    <option value="A2-">A2-</option>
+                </select>
+                <button id="saveBloodGroup">Save</button>
+            </div>
+            <canvas id="bloodGroupChart"></canvas>
+        </section>
+
+        <section class="info-section">
+            <h3>Why Donate Blood?</h3>
+            <p>Every year, millions of people need blood transfusions due to emergencies, surgeries, and medical conditions. Your donation can save lives and provide essential support to those in need.</p>
+            <p><strong>Join us in making a difference!</strong> Donating blood not only helps patients but also benefits your health. Regular donations can reduce the risk of certain diseases and keep your body healthy.</p>
+            <p>Remember, each donation can save up to three lives. Become a hero today by donating blood!</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 IoT Blood Bank Management. All Rights Reserved.</p>
+            <p>Follow us on 
+                <a href="#">Facebook</a>, 
+                <a href="#">Twitter</a>, 
+                <a href="#">Instagram</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCti_AdCoIsalM9sD8LKTRCpXsinwKRZjE",
+            authDomain: "hospial-reg.firebaseapp.com",
+            projectId: "hospial-reg",
+            storageBucket: "hospial-reg.appspot.com",
+            messagingSenderId: "15761981908",
+            appId: "1:15761981908:web:3e14172e9ff76bb0884bb1"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // User Authentication Handler
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                updateUserProfile(user);
+            } else {
+                window.location.href = "hoslogin.html";
+            }
+        });
+
+        // Update User Profile
+        function updateUserProfile(user) {
+            document.getElementById('profileName').innerText = user.displayName || 'No Name';
+            document.getElementById('profileEmail').innerText = user.email || 'No Email';
+            document.getElementById('profileImage').src = user.photoURL || '';
+            document.getElementById('profileLocation').innerText = 'Sample Location';
+            document.getElementById('profileContact').innerText = '1234567890';
+            document.getElementById('profileYear').innerText = '2000';
+        }
+
+        // Image Upload Handler
+        document.getElementById('uploadBtn').addEventListener('click', () => {
+            const file = document.getElementById('imageUpload').files[0];
+            if (!file) return;
+
+            const storageRef = firebase.storage().ref('profile_images/' + file.name);
+            const uploadTask = storageRef.put(file);
+
+            uploadTask.on('state_changed', 
+                null,
+                error => console.error('Upload failed:', error),
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL()
+                        .then(downloadURL => {
+                            document.getElementById('profileImage').src = downloadURL;
+                        });
+                }
+            );
+        });
+
+        // Blood Group Chart Setup
+        const ctx = document.getElementById('bloodGroupChart').getContext('2d');
+        const bloodGroupData = {};
+
+        const bloodGroupChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Blood Group Amount',
+                    data: [],
+                    backgroundColor: '#e74c3c',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Blood Group Data Handler
+        document.getElementById('saveBloodGroup').addEventListener('click', () => {
+            const selectedBloodGroup = document.getElementById('bloodGroupSelect').value;
+            const amount = parseInt(document.getElementById('bloodGroupAmount').value);
+
+            if (!amount || isNaN(amount)) return;
+
+            bloodGroupData[selectedBloodGroup] = (bloodGroupData[selectedBloodGroup] || 0) + amount;
+            
+            bloodGroupChart.data.labels = Object.keys(bloodGroupData);
+            bloodGroupChart.data.datasets[0].data = Object.values(bloodGroupData);
+            bloodGroupChart.update();
+
+            document.getElementById('bloodGroupAmount').value = '';
+        });
+    </script>
+</body>
+</html>
